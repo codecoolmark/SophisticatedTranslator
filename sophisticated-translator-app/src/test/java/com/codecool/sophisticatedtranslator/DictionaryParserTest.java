@@ -52,6 +52,41 @@ public class DictionaryParserTest {
 
         expectedOutput = new WordPair( "Aachen", "Aachener");
         Assertions.assertEquals(expectedOutput, output);
+
+        testLine = "Diethylsulfat {n} [chem.] :: diethyl sulphate [Br.]; diethyl sulfate [Am.]";
+        output = parser.parseLine(testLine);
+
+        expectedOutput = new WordPair("diethyl sulphate", "Diethylsulfat");
+
+        Assertions.assertEquals(expectedOutput, output);
+
+        testLine = "Trichlorbenzole {pl} [chem.] :: trichlorobenzenes /TCB/";
+        output = parser.parseLine(testLine);
+
+        expectedOutput = new WordPair("trichlorobenzenes", "Trichlorbenzole");
+
+        Assertions.assertEquals(expectedOutput, output);
+
+        testLine = "Pyrrolidon, N-Octyl- {n} [chem.] :: pyrrolidone, N-octyl-";
+        output = parser.parseLine(testLine);
+
+        expectedOutput = new WordPair("pyrrolidone", "Pyrrolidon");
+
+        Assertions.assertEquals(expectedOutput, output);
+
+        testLine = "Acrylsäureethylester {n}; Ethylacrylat {n} [chem.] :: ethyl acrylate; acrylic acid ethyl ester";
+        output = parser.parseLine(testLine);
+
+        expectedOutput = new WordPair("ethyl acrylate", "Acrylsäureethylester");
+
+        Assertions.assertEquals(expectedOutput, output);
+
+        testLine = "Chlorpromazin {n} [chem.] :: chlorpromazine <Thorazine>";
+        output = parser.parseLine(testLine);
+
+        expectedOutput = new WordPair("chlorpromazine", "Chlorpromazin");
+
+        Assertions.assertEquals(expectedOutput, output);
     }
 
     @Test
@@ -72,6 +107,22 @@ public class DictionaryParserTest {
                 new WordPair("eel stock", "Aalbestand"),
                 new WordPair("eel spear", "Aalspieß"));
         Assertions.assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void testLineComments() {
+        // Arrange
+
+        var testLines = "# this is a line comment\n" +
+                "Aachener {adj} | der Aachener Dom | Aachener Printen [cook.] :: Aachen | the Aachen Cathedral | hard ginger bread from Aachen\n";
+        var parser = new DictionaryParser();
+
+        // Act
+        var output = parser.parse(testLines).collect(Collectors.toList());
+
+        var expectedResult = List.of(new WordPair("Aachen", "Aachener"));
+
+        Assertions.assertEquals(expectedResult, output);
     }
 
 }
