@@ -1,6 +1,8 @@
 package com.codecool.sophisticatedtranslator;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Translator {
 
@@ -10,7 +12,17 @@ public class Translator {
         this.wordPairs = wordPairs;
     }
 
-    public String translate(String input) {
-        return input;
+    public Optional<String> translate(String input) {
+        var germanTranslations = this.wordPairs.stream()
+                .filter(pair -> pair.englishWord().equalsIgnoreCase(input))
+                .map(WordPair::germanWord);
+
+        var englishTranslations = this.wordPairs.stream()
+                .filter(pair -> pair.germanWord().equalsIgnoreCase(input))
+                .map(WordPair::englishWord);
+
+        return germanTranslations
+                .findAny()
+                .or(englishTranslations::findAny);
     }
 }
