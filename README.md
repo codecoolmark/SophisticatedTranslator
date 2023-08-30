@@ -18,3 +18,5 @@ in the terminal.
 ## Session
 
 * 2023-07-23 Project setup, began with parser implementation
+* 2023-08-02 Parser corner cases
+* 2023-08-16 Finished parser, added prompt
