@@ -1,8 +1,9 @@
 package com.codecool.sophisticatedtranslator;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class Translator {
 
@@ -12,7 +13,16 @@ public class Translator {
         this.wordPairs = wordPairs;
     }
 
-    public Optional<String> translate(String input) {
+    public String translate(String input) {
+        var words = input.split(" ");
+
+        return Arrays.stream(words)
+                .map(word -> new Translation(word, translateWord(word)))
+                .map(pair -> pair.translation().orElse(pair.originalWord()))
+                .collect(Collectors.joining(" "));
+    }
+
+    public Optional<String> translateWord(String input) {
         var germanTranslations = this.wordPairs.stream()
                 .filter(pair -> pair.englishWord().equalsIgnoreCase(input))
                 .map(WordPair::germanWord);
